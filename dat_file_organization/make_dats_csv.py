@@ -21,7 +21,7 @@ def create_waterfalls(fil_paths):
 
     return waterfalls
 
-def write_dat_summary(startfile, dat_paths, h5_fil_paths, proj_name, contact_people, outfile_name = 'dat_summary.csv'):
+def write_dat_summary(startfile, dat_paths, h5_fil_paths, proj_name, contact_people, storage_loc, outfile_name = 'dat_summary.csv'):
 
     starting_df = pd.read_csv(startfile)
 
@@ -47,7 +47,7 @@ def write_dat_summary(startfile, dat_paths, h5_fil_paths, proj_name, contact_peo
 
     table_data = []
     for i in range(num_rows):
-        row = [dat_names[i], proj_name, contact_people, rx_list[i], mjd_list[i], target_list[i], h5_fil_paths[i]]
+        row = [dat_names[i], proj_name, contact_people, rx_list[i], mjd_list[i], target_list[i], storage_loc, h5_fil_paths[i]]
         table_data.append(row)
 
     new_dat_summary_df = pd.DataFrame(table_data, columns=starting_df.columns)
@@ -68,24 +68,25 @@ def get_file_paths(file_paths_lst):
 
 def main():
 
-    starting_table_fname = 'starting_dat_summary.csv'
-    new_table_fname = 'dat_summary_1.csv'
+    starting_table_fname = 'dat_summary_1.csv'
+    new_table_fname = 'dat_summary_etz_and_gcp.csv'
 
-    dats_list_file = 'sofia_dat_paths.lst' #insert filepath here
+    dats_list_file = 'karen_dat_paths.lst' #insert filepath here
     dat_filepaths = get_file_paths(dats_list_file)
 
-    list_h5_fil_file = 'sofia_fil_paths.lst'
+    list_h5_fil_file = 'karen_fil_paths.lst'
     h5_fil_paths = get_file_paths(list_h5_fil_file)
 
-    project = 'Earth Transit Zone Project'
-    contact_person = 'Sofia Sheikh'
+    project = 'Galactic Center Survey'
+    contact_person = 'Karen Perez'
+    stored = 'blpc0'
 
-    starting_table = pd.DataFrame([[' ', ' ', ' ', ' ', ' ', ' ', ' ']], columns=['.dat File Name', 'Project Name', 'Contact Person(s)', 'Max. Freq', 'MJD', 'Target', 'Path to .h5 / .fil'])
-    starting_table.to_csv(starting_table_fname, index=False)
+    # starting_table = pd.DataFrame([[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']], columns=['.dat File Name', 'Project Name', 'Contact Person(s)', 'Max. Freq', 'MJD', 'Target', \
+    #                                                                                   'Storage Location', 'Path to .h5 / .fil'])
+    #starting_table.to_csv(starting_table_fname, index=False)
+    # print(starting_table)
 
-    print(starting_table)
-
-    dat_summary = write_dat_summary(starting_table_fname, dat_filepaths, h5_fil_paths, project, contact_person, outfile_name = 'dat_summary.csv')
+    dat_summary = write_dat_summary(starting_table_fname, dat_filepaths, h5_fil_paths, project, contact_person, stored, new_table_fname)
     print(dat_summary)
 
 if __name__ == '__main__':
